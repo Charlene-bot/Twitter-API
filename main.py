@@ -2,6 +2,7 @@
 import numpy as np
 import requests 
 import base64
+import tweepy 
 
 #variables for accessing twitter API
 consumer_key='x8jpWWhmWACKYs7IJXE0LxFmy'
@@ -37,4 +38,26 @@ post_headers = {
 }
 post_url = 'https://api.twitter.com/1.1/statuses/update.json'   
 post_resp = requests.post(post_url,headers=post_headers,params=post_params)
+#print(post_resp.status_code)
 
+#recent_resp = requests.get()
+trend_headers = {
+    'Authorization': 'Bearer {}'.format(access_token)    
+}
+
+trend_params = {
+    'q': 'Afronation',
+    'result_type': 'recent',
+    'count': 10
+}
+
+trend_url = 'https://api.twitter.com/1.1/search/tweets.json'  
+trend_resp = requests.get(trend_url, headers=trend_headers, params=trend_params)
+print(trend_resp)
+
+tweets = trend_resp.json()
+
+#print(tweets)
+
+for x in tweets['statuses']:
+    print(x['text'] + '\n')
