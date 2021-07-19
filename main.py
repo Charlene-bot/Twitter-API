@@ -3,6 +3,9 @@ import numpy as np
 import requests 
 import base64
 import tweepy 
+import pandas as pd 
+import sqlalchemy 
+from sqlalchemy import create_engine
 
 #variables for accessing twitter API
 consumer_key='x8jpWWhmWACKYs7IJXE0LxFmy'
@@ -53,11 +56,15 @@ trend_params = {
 
 trend_url = 'https://api.twitter.com/1.1/search/tweets.json'  
 trend_resp = requests.get(trend_url, headers=trend_headers, params=trend_params)
-print(trend_resp)
+#print(trend_resp)
 
 tweets = trend_resp.json()
 
 #print(tweets)
+database = pd.DataFrame.from_dict(list(tweets.items()))
+print(database)
+engine = create_engine('mysql://root:codio@localhost/twitter_collection')
+database.to_sql('table_name', con=engine, if_exists='replace', index=False)
 
-for x in tweets['statuses']:
-    print(x['text'] + '\n')
+#for x in tweets['statuses']:
+#    print(x['text'] + '\n')
